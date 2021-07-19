@@ -1,0 +1,98 @@
+buildscript {
+    ext.appengine_version = '1.9.60'
+    ext.appengine_plugin_version = '1.3.4'
+    repositories {
+        jcenter()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.cloud.tools:appengine-gradle-plugin:$appengine_plugin_version"
+        classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:3.2.0"
+        classpath "org.mariadb.jdbc:mariadb-java-client:2.1.2"
+        classpath "com.maeharin:factlin:0.3.0"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+apply plugin: 'war'
+apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
+apply plugin: 'factlin'
+
+group 'com.example'
+version '0.0.1'
+mainClassName = "io.ktor.server.netty.EngineMain"
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+dependencies {
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // ktor
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-server-core:$ktor_version"
+    implementation "io.ktor:ktor-jackson:$ktor_version"
+    implementation "io.ktor:ktor-locations:$ktor_version"
+
+    // authentication
+    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
+
+    // koin
+    implementation "org.koin:koin-core:$koin_ktor_version"
+    implementation "org.koin:koin-ktor:$koin_ktor_version"
+    implementation "org.koin:koin-test:$koin_ktor_version"
+
+    // jackson
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.5"
+
+    // exposed
+    implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
+    implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
+    implementation "org.jetbrains.exposed:exposed-java-time:$exposed_version"
+
+    // mysql
+    implementation "mysql:mysql-connector-java:8.0.11"
+
+    // log
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+
+    // fuel
+    implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
+
+    // firebase
+    implementation "com.google.firebase:firebase-admin:$firebase_admin_version"
+
+    // test
+    testImplementation "io.ktor:ktor-server-tests:$ktor_version"
+
+    // junit5
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+    testImplementation "org.assertj:assertj-core:3.10.0"
+
+    // dbsetup
+    testImplementation 'com.ninja-squad:DbSetup-kotlin:2.1.0'
+}
+
+factlin {
+    dbUrl = "jdbc:mysql://127.0.0.1:3306/example?nullNamePatternMatchesAll=true&createDatabaseIfNotExist=true&useSSL=false"
+    dbUser = "root"
+    dbPassword = "password"
+    dbDialect = "mariadb"
+    fixtureOutputDir = "src/test/kotlin/example/common/fixtures"
+    fixturePackageName = "example.fixtures"
+    schema = "example"
+}
