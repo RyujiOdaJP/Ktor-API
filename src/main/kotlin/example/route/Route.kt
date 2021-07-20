@@ -1,3 +1,5 @@
+package example.route
+
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
