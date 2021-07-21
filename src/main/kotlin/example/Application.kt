@@ -14,8 +14,11 @@ fun main(args: Array<String>) {
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {
+    // module() 関数内 で install() を 実行 することで Ktor に 様々 な module を 追加 することが 可能 です。
     install(DefaultHeaders)
     install(ContentNegotiation) {
+
+        // json形式のPostを受け取るためのライブラリ
         jackson {  }
     }
     routing {

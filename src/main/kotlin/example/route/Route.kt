@@ -15,6 +15,6 @@ fun Routing.root() {
 
     post("/") {
         val request = call.receive<PostRequest>()
-        call.respond(PostResponse("${request.value} posted"))
+        call.respond(HttpStatusCode.OK, PostResponse("${request.value} posted"))
     }
 }
